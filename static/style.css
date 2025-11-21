@@ -1,0 +1,260 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #f4f5fb;
+  color: #222;
+}
+
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: linear-gradient(90deg, #4a8cff, #6e9bff);
+  color: #fff;
+  padding: 0.75rem 1.5rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+}
+
+.app-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.app-main {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 1rem 1rem 2rem;
+}
+
+.app-footer {
+  text-align: center;
+  padding: 0.75rem;
+  font-size: 0.8rem;
+  color: #777;
+}
+
+/* section & card */
+
+.section {
+  margin-top: 1rem;
+}
+
+.section-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  justify-content: space-between;
+}
+
+.section-header h1 {
+  margin: 0;
+  font-size: 1.3rem;
+}
+
+.card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 1rem 1.2rem 1.1rem;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.09);
+}
+
+.card h2 {
+  margin-top: 0;
+  font-size: 1.05rem;
+}
+
+/* form */
+
+.form-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.form-field {
+  flex: 1;
+  min-width: 120px;
+}
+
+.form-field-full {
+  flex: 1 1 100%;
+}
+
+label {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-size: 0.85rem;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="date"],
+select {
+  width: 100%;
+  padding: 0.4rem 0.5rem;
+  border-radius: 8px;
+  border: 1px solid #cbd5f5;
+  font-size: 0.9rem;
+  background: #f9fbff;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+input[type="date"]:focus,
+select:focus {
+  outline: none;
+  border-color: #4a8cff;
+  background: #ffffff;
+  box-shadow: 0 0 0 1px rgba(74, 140, 255, 0.15);
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.25rem;
+}
+
+button {
+  border: none;
+  border-radius: 999px;
+  padding: 0.4rem 0.9rem;
+  cursor: pointer;
+  font-size: 0.88rem;
+  background: #4a8cff;
+  color: #fff;
+  box-shadow: 0 2px 4px rgba(74, 140, 255, 0.5);
+  transition: transform 0.1s ease, box-shadow 0.1s ease, opacity 0.15s ease;
+}
+
+button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(74, 140, 255, 0.6);
+}
+
+button:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 3px rgba(74, 140, 255, 0.7);
+  opacity: 0.9;
+}
+
+.btn-delete {
+  background: #ff5b6b;
+  box-shadow: 0 2px 4px rgba(255, 91, 107, 0.7);
+}
+
+/* summary */
+
+.card-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.summary-main {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.summary-label {
+  font-size: 0.85rem;
+  color: #555;
+}
+
+.summary-amount {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.summary-sub {
+  font-size: 0.85rem;
+  color: #777;
+}
+
+/* table */
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.items-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+}
+
+.items-table th,
+.items-table td {
+  padding: 0.5rem 0.55rem;
+  border-bottom: 1px solid #edf0ff;
+  text-align: left;
+}
+
+.items-table th {
+  background: #eef2ff;
+  font-weight: 600;
+}
+
+.items-table tbody tr:nth-child(even) td {
+  background: #fafbff;
+}
+
+.amount-cell {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.memo-cell {
+  max-width: 260px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.muted {
+  color: #888;
+  font-size: 0.86rem;
+}
+
+/* month selector */
+
+.month-selector {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+}
+
+.month-selector select {
+  min-width: 180px;
+}
+
+@media (max-width: 640px) {
+  .app-main {
+    padding-inline: 0.75rem;
+  }
+  .card {
+    padding-inline: 0.8rem;
+  }
+  .card-summary {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

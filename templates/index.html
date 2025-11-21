@@ -1,0 +1,185 @@
+{% extends "base.html" %}
+
+{% block title %}家計簿（{{ year }}年{{ month }}月）{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="section-header">
+    <h1>{{ year }}年{{ month }}月の家計簿</h1>
+    <form
+      class="month-selector"
+      method="get"
+      action="{{ url_for('month_view') }}"
+    >
+      <label>
+        月を選択:
+        <select name="year_month" onchange="onMonthSelectChange(this)">
+          <!-- 現在表示中の年月を先頭に -->
+          <option value="{{ year }}-{{ '%02d'|format(month) }}" selected>
+            {{ year }}年{{ '%02d'|format(month) }}月（表示中）
+          </option>
+          {% for m in months_info %}
+          {% if not (m.year == year and m.month == month) %}
+          <option value="{{ m.year }}-{{ '%02d'|format(m.month) }}">
+            {{ m.year }}年{{ '%02d'|format(m.month) }}月
+            （{{ "{:,}".format(m.total_amount) }}円）
+          </option>
+          {% endif %}
+          {% endfor %}
+        </select>
+      </label>
+      <input type="hidden" name="year" id="month-year-input" />
+      <input type="hidden" name="month" id="month-month-input" />
+      <button type="submit">移動</button>
+    </form>
+  </div>
+</section>
+
+<section class="section">
+  <div class="card">
+    <h2>支出を追加</h2>
+    <form action="{{ url_for('add') }}" method="post" class="form-grid">
+      <div class="form-row">
+        <div class="form-field">
+          <label for="date">日付</label>
+          <input
+            type="date"
+            id="date"
+            name="date"
+            value=""
+            placeholder="例: 2025-11-22"
+          />
+        </div>
+        <div class="form-field">
+          <label for="category">カテゴリ</label>
+          <input
+            type="text"
+            id="category"
+            name="category"
+            placeholder="食費 / 交通費 / 趣味 など"
+          />
+        </div>
+        <div class="form-field">
+          <label for="amount">金額（円）</label>
+          <input
+            type="number"
+            id="amount"
+            name="amount"
+            min="0"
+            step="1"
+            required
+          />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-field form-field-full">
+          <label for="memo">メモ</label>
+          <input
+            type="text"
+            id="memo"
+            name="memo"
+            placeholder="一言メモ（任意）"
+          />
+        </div>
+      </div>
+
+      <!-- 現在の年月に戻すための情報 -->
+      <input type="hidden" name="redirect_year" value="{{ year }}" />
+      <input type="hidden" name="redirect_month" value="{{ month }}" />
+
+      <div class="form-actions">
+        <button type="submit">追加する</button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<section class="section">
+  <div class="card card-summary">
+    <div class="summary-main">
+      <div class="summary-label">今月の合計</div>
+      <div class="summary-amount">{{ "{:,}".format(total) }} 円</div>
+    </div>
+    <div class="summary-sub">
+      <span>カテゴリ別内訳をグラフで表示</span>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="card">
+    <h2>カテゴリ別グラフ</h2>
+    <div
+      id="chartContainer"
+      data-labels='{{ category_labels | tojson }}'
+      data-values='{{ category_values | tojson }}'
+    >
+      <canvas id="categoryChart"></canvas>
+    </div>
+    {% if not category_labels %}
+    <p class="muted">この月のデータがないため、グラフは表示できません。</p>
+    {% endif %}
+  </div>
+</section>
+
+<section class="section">
+  <div class="card">
+    <h2>明細一覧</h2>
+    <div class="table-wrapper">
+      <table class="items-table">
+        <thead>
+          <tr>
+            <th>日付</th>
+            <th>カテゴリ</th>
+            <th>金額</th>
+            <th>メモ</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in items %}
+          <tr>
+            <td>{{ item["date"] }}</td>
+            <td>{{ item["category"] or "" }}</td>
+            <td class="amount-cell">
+              {{ "{:,}".format(item["amount"]) }} 円
+            </td>
+            <td class="memo-cell" title="{{ item['memo'] or '' }}">
+              {{ item["memo"] or "" }}
+            </td>
+            <td>
+              <form
+                action="{{ url_for('delete', item_id=item['id']) }}"
+                method="post"
+              >
+                <input
+                  type="hidden"
+                  name="redirect_year"
+                  value="{{ year }}"
+                />
+                <input
+                  type="hidden"
+                  name="redirect_month"
+                  value="{{ month }}"
+                />
+                <button
+                  class="btn-delete"
+                  type="submit"
+                  onclick="return confirm('削除しますか？');"
+                >
+                  削除
+                </button>
+              </form>
+            </td>
+          </tr>
+          {% else %}
+          <tr>
+            <td colspan="5" class="muted">この月のデータはまだありません。</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+{% endblock %}
